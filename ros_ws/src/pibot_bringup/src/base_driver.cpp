@@ -141,10 +141,9 @@ void BaseDriver::update_param()
     if (bdg.get_param_update_flag())
     {
         frame->interact(ID_SET_ROBOT_PARAMTER);
+        ros::Rate loop(5);
+        loop.sleep();
     }
-    
-    ros::Rate loop(5);
-    loop.sleep();
 #endif
 }
 
