@@ -82,7 +82,7 @@
   </link>
   <joint
     name="laser_link_joint"
-    type="continuous">
+    type="fixed">
     <origin
       xyz="8.3302E-05 -4.8095E-05 0.156"
       rpy="0 -4.8144E-17 3.14" />

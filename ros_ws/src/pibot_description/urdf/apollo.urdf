@@ -18,7 +18,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0.05"
+        xyz="0.055 0 0.05"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -84,7 +84,7 @@
     name="laser_link_joint"
     type="fixed">
     <origin
-      xyz="-0.0525 0 0.09"
+      xyz="0 0 0.09"
       rpy="0 0 0" />
     <parent
       link="base_link" />
