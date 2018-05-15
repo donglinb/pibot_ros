@@ -30,6 +30,8 @@ void BaseDriverConfig::init(Robot_parameter* r)
   ROS_INFO("port:%s buadrate:%d", port.c_str(), buadrate);
 
   pn.param<std::string>("base_frame", base_frame, "base_link");
+  pn.param<std::string>("odom_frame", odom_frame, "odom");
+  pn.param<bool>("publish_tf", publish_tf, true);
 
   pn.param<bool>("out_pid_debug_enable", out_pid_debug_enable, false);
   ROS_INFO("out_pid_debug_enable:%d", out_pid_debug_enable);
@@ -69,13 +71,16 @@ void BaseDriverConfig::dynamic_callback(pibot_bringup::pibot_driverConfig &confi
     config.max_v_liner_x = rp->max_v_liner_x;
     config.max_v_liner_y = rp->max_v_liner_y;
     config.max_v_angular_z = rp->max_v_angular_z;
+    config.imu_type = rp->imu_type;
+    
     return;
   }
-  ROS_INFO("Reconfigure Request: %d %d %d %d %d %d %d %d %d %d %d %d", 
+  ROS_INFO("Reconfigure Request: %d %d %d %d %d %d %d %d %d %d %d %d %d", 
           config.wheel_diameter, config.wheel_track,  config.encoder_resolution,
           config.do_pid_interval, config.kp, config.ki, config.kd, config.ko, 
           config.cmd_last_time, 
-          config.max_v_liner_x, config.max_v_liner_y, config.max_v_angular_z);
+          config.max_v_liner_x, config.max_v_liner_y, config.max_v_angular_z, 
+          config.imu_type);
 
   rp->wheel_diameter = config.wheel_diameter;
   rp->wheel_track = config.wheel_track;
@@ -89,6 +94,7 @@ void BaseDriverConfig::dynamic_callback(pibot_bringup::pibot_driverConfig &confi
   rp->max_v_liner_x = config.max_v_liner_x;
   rp->max_v_liner_y = config.max_v_liner_y;
   rp->max_v_angular_z = config.max_v_angular_z;
+  rp->imu_type = config.imu_type;
 
   param_update_flag = true;
 }

@@ -3,9 +3,10 @@ buadrate: 115200
 
 base_frame: base_link
 odom_frame: odom
-odom_topic: odom
+odom_topic: wheel_odom
 
-publish_tf: true
+publish_tf: false
+
 # topic
 cmd_vel_topic: cmd_vel
 

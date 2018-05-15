@@ -11,6 +11,7 @@
 #include <std_msgs/Int32.h>
 #include "pibot_bringup/transport.h"
 #include "pibot_bringup/dataframe.h"
+#include <pibot_msgs/RawImu.h>
 
 class BaseDriver
 {
@@ -32,6 +33,7 @@ private:
   //void correct_pos_callback(const std_msgs::Float32MultiArray& pos);
   void init_cmd_odom();
   void init_pid_debug();
+  void init_imu();
   void read_param();
 
   void update_param();
@@ -39,6 +41,7 @@ private:
   void update_odom();
   void update_speed();
   void update_pid_debug();
+  void update_imu();
 
 public:
 
@@ -84,4 +87,7 @@ private:
   bool need_update_speed;
   //ros::Time last_update_odom_time; 
 
+  pibot_msgs::RawImu raw_imu_msgs;
+
+  ros::Publisher raw_imu_pub;
 };

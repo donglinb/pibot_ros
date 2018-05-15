@@ -4,6 +4,7 @@
 #include <std_msgs/Float32MultiArray.h>
 #include "serial_transport.h"
 #include "simple_dataframe_master.h"
+#include <boost/assign/list_of.hpp>
 
 BaseDriver* BaseDriver::instance = NULL;
 
@@ -41,6 +42,8 @@ BaseDriver::BaseDriver() : pn("~"), bdg(pn)
     init_pid_debug();
 
     read_param();
+
+    init_imu();
 }
 
 BaseDriver::~BaseDriver()
@@ -55,19 +58,37 @@ void BaseDriver::init_cmd_odom()
 
     ROS_INFO_STREAM("subscribe cmd topic on [" << bdg.cmd_vel_topic << "]");
     cmd_vel_sub = nh.subscribe(bdg.cmd_vel_topic, 1000, &BaseDriver::cmd_vel_callback, this);
-    odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 50);
+
+    ROS_INFO_STREAM("advertise odom topic on [" << bdg.odom_topic << "]");
+    odom_pub = nh.advertise<nav_msgs::Odometry>(bdg.odom_topic, 50);
 
     //init odom_trans
-    odom_trans.header.frame_id = "odom";  
+    odom_trans.header.frame_id = bdg.odom_frame;  
     odom_trans.child_frame_id = bdg.base_frame;  
 
     odom_trans.transform.translation.z = 0;  
 
     //init odom
-    odom.header.frame_id = "odom";  
+    odom.header.frame_id = bdg.odom_frame;  
     odom.pose.pose.position.z = 0.0;
     odom.child_frame_id = bdg.base_frame;  
     odom.twist.twist.linear.y = 0;  
+
+    if (!bdg.publish_tf){
+        odom.pose.covariance =  boost::assign::list_of(1e-3) (0) (0)  (0)  (0)  (0)
+                                                    (0) (1e-3)  (0)  (0)  (0)  (0)
+                                                    (0)   (0)  (1e6) (0)  (0)  (0)
+                                                    (0)   (0)   (0) (1e6) (0)  (0)
+                                                    (0)   (0)   (0)  (0) (1e6) (0)
+                                                    (0)   (0)   (0)  (0)  (0)  (1e3) ;
+    
+        odom.twist.covariance =  boost::assign::list_of(1e-3) (0)   (0)  (0)  (0)  (0)
+                                                    (0) (1e-3)  (0)  (0)  (0)  (0)
+                                                    (0)   (0)  (1e6) (0)  (0)  (0)
+                                                    (0)   (0)   (0) (1e6) (0)  (0)
+                                                    (0)   (0)   (0)  (0) (1e6) (0)
+                                                    (0)   (0)   (0)  (0)  (0)  (1e3) ; 
+    }
 
     need_update_speed = false;
 
@@ -89,6 +110,15 @@ void BaseDriver::init_pid_debug()
     }
 }
 
+void BaseDriver::init_imu()
+{
+    raw_imu_pub = nh.advertise<pibot_msgs::RawImu>("raw_imu", 50);
+    raw_imu_msgs.header.frame_id = "imu_link";
+    raw_imu_msgs.accelerometer = true;
+    raw_imu_msgs.gyroscope = true;
+    raw_imu_msgs.magnetometer = true;
+}
+
 void BaseDriver::read_param()
 {
     Robot_parameter* param = &Data_holder::get()->parameter;
@@ -96,10 +126,11 @@ void BaseDriver::read_param()
 
     frame->interact(ID_GET_ROBOT_PARAMTER);
 
-    ROS_INFO("RobotParameters: %d %d %d %d %d %d %d %d %d %d %d %d", 
+    ROS_INFO("RobotParameters: %d %d %d %d %d %d %d %d %d %d %d %d %d", 
         param->wheel_diameter, param->wheel_track,  param->encoder_resolution, 
         param->do_pid_interval, param->kp, param->ki, param->kd, param->ko, 
-        param->cmd_last_time, param->max_v_liner_x, param->max_v_liner_y, param->max_v_angular_z);
+        param->cmd_last_time, param->max_v_liner_x, param->max_v_liner_y, param->max_v_angular_z,
+        param->imu_type);
 
     bdg.SetRobotParameters();
 }
@@ -128,6 +159,9 @@ void BaseDriver::work_loop()
         update_pid_debug();
 
         update_speed();
+		
+        if (Data_holder::get()->parameter.imu_type == 'E')
+            update_imu();
 		
         loop.sleep();
 
@@ -164,20 +198,23 @@ void BaseDriver::update_odom()
     
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
-    //send the transform  
-    odom_trans.header.stamp = current_time;  
-    odom_trans.transform.translation.x = x;  
-    odom_trans.transform.translation.y = y;  
-    odom_trans.transform.rotation = odom_quat; 
-    odom_broadcaster.sendTransform(odom_trans);  
+    //publish_tf
+    if (bdg.publish_tf){
+        odom_trans.header.stamp = current_time;  
+        odom_trans.transform.translation.x = x;  
+        odom_trans.transform.translation.y = y;  
+        odom_trans.transform.rotation = odom_quat; 
+        odom_broadcaster.sendTransform(odom_trans);  
+    }
 
     //publish the message  
     odom.header.stamp = current_time;  
     odom.pose.pose.position.x = x;  
     odom.pose.pose.position.y = y;  
-    odom.pose.pose.orientation = odom_quat;  
+    odom.pose.pose.orientation = odom_quat;    
     odom.twist.twist.linear.x = vxy;  
     odom.twist.twist.angular.z = vth;  
+    
     odom_pub.publish(odom);
 }
 
@@ -205,4 +242,20 @@ void BaseDriver::update_pid_debug()
             pid_debug_pub_output[i].publish(pid_debug_msg_output[i]);
         }
     }
+}
+
+void BaseDriver::update_imu()
+{
+    frame->interact(ID_GET_IMU_DATA);
+    raw_imu_msgs.header.stamp = ros::Time::now();
+    raw_imu_msgs.raw_linear_acceleration.x = Data_holder::get()->imu_data[0];
+    raw_imu_msgs.raw_linear_acceleration.y = Data_holder::get()->imu_data[1];
+    raw_imu_msgs.raw_linear_acceleration.z= Data_holder::get()->imu_data[2];
+    raw_imu_msgs.raw_angular_velocity.x = Data_holder::get()->imu_data[3];
+    raw_imu_msgs.raw_angular_velocity.y = Data_holder::get()->imu_data[4];
+    raw_imu_msgs.raw_angular_velocity.z = Data_holder::get()->imu_data[5];
+    raw_imu_msgs.raw_magnetic_field.x = Data_holder::get()->imu_data[6];
+    raw_imu_msgs.raw_magnetic_field.y = Data_holder::get()->imu_data[7];
+    raw_imu_msgs.raw_magnetic_field.z = Data_holder::get()->imu_data[8];
+    raw_imu_pub.publish(raw_imu_msgs);
 }

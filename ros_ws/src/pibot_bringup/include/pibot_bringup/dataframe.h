@@ -9,6 +9,7 @@ enum MESSAGE_ID{
     ID_SET_VELOCITY = 4,
     ID_GET_ODOM = 5,
     ID_GET_PID_DATA = 6,
+    ID_GET_IMU_DATA = 7,
     ID_MESSGAE_MAX
 };
 

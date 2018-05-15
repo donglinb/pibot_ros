@@ -92,6 +92,9 @@ bool Simple_dataframe::data_parse(){
     case ID_GET_PID_DATA:
         memcpy(&dh->pid_data, active_rx_msg.data, sizeof(dh->pid_data));
         break;
+    case ID_GET_IMU_DATA:
+        memcpy(&dh->imu_data, active_rx_msg.data, sizeof(dh->imu_data));
+        break;
     default:
         break;
     }
@@ -151,6 +154,8 @@ bool Simple_dataframe::interact(const MESSAGE_ID id){
     case ID_GET_PID_DATA:
         send_message(id);
         break;
+    case ID_GET_IMU_DATA:
+        send_message(id);
     default:
         break;
     }

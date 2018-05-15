@@ -35,6 +35,9 @@ public:
   int32_t buadrate;
 
   std::string base_frame;
+  std::string odom_frame;
+
+  bool publish_tf;
 
   //double ticks_per_meter;
 

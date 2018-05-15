@@ -31,6 +31,7 @@ struct Robot_parameter{
             unsigned short max_v_liner_x;
             unsigned short max_v_liner_y;
             unsigned short max_v_angular_z;
+            unsigned char imu_type;
         };
     };
 };
@@ -75,6 +76,7 @@ class Data_holder{
             memset(&velocity, 0, sizeof(struct Robot_velocity));
             memset(&odom, 0, sizeof(struct Robot_odom));
             memset(&pid_data, 0, sizeof(struct Robot_pid_data));
+            memset(&imu_data, 0, sizeof(imu_data));
             }
     public:
         struct Robot_firmware  firmware_info;
@@ -82,5 +84,7 @@ class Data_holder{
         struct Robot_velocity  velocity;
         struct Robot_odom      odom;
         struct Robot_pid_data  pid_data;
+
+        float imu_data[9];
 };
 #endif
