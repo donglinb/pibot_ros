@@ -1,5 +1,5 @@
 <launch>
-  <arg name="model" default="$(env PIBOT_MODEL)" doc="model type [apollo, zeus]"/>
+  <arg name="model" default="$(env PIBOT_MODEL)" doc="model type [apollo, zeus, hades, hera]"/>
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
     <rosparam file="$(find pibot_navigation)/params/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
