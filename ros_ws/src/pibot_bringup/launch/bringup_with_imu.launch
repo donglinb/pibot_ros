@@ -5,8 +5,8 @@
 
     <node pkg="pibot_imu" type="pibot_imu" name="pibot_imu" output="screen" respawn="false">
         <rosparam>
-            imu/accelerometer_bias: {x: 0.00015, y: -0.001884, z: -9.812245}
-            imu/gyroscope_bias: {x: -0.000110, y: 0.000006, z: -0.000037}
+            imu/accelerometer_bias: {x: 0.295930, y: -0.626698, z: -1.146618}
+            imu/gyroscope_bias: {x: -0.059713, y: 0.008481, z: -0.008550}
         </rosparam>
         <param name="imu/perform_calibration" value="false" />
     </node>
@@ -14,32 +14,22 @@
     <node pkg="tf" type="static_transform_publisher" name="base_imu_to_base_link"
         args="0 0.0 0 0 0.0  0.0 /base_link /imu_link 40" />  
 
-    <!--node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_madgwick" output="screen" respawn="false" >
-        <param name="use_magnetic_field_msg" value="false" />
-        <param name="publish_tf" value="false" />
-    </node-->
-
-    <node pkg="imu_complementary_filter" type="complementary_filter_node" name="complementary_filter_gain_node" output="screen" respawn="false" >
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_madgwick" output="screen" respawn="false" >
         <param name="use_mag" value="false" />
         <param name="publish_tf" value="false" />
-    </node>
-
-    <node pkg="pibot_bringup" type="imu_with_covariance.py" name="imu_with_covariance" output="screen">
-        <remap from="input" to="imu/data" />
-        <remap from="output" to="imu_with_covariance/data" />_
     </node>
 
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
         <param name="output_frame" value="odom" />
         <param name="base_footprint_frame" value="base_link"/>
-        <param name="freq" value="100.0"/>
+        <param name="freq" value="200.0"/>
         <param name="sensor_timeout" value="1.0"/>  
         <param name="odom_used" value="true"/>
         <param name="imu_used" value="true"/>
         <param name="vo_used" value="false"/>
-        <param name="debug" value="true"/>
+        <param name="debug" value="false"/>
         <remap from="odom" to="wheel_odom" />
-        <remap from="imu_data" to="imu_with_covariance/data" />
+        <remap from="imu_data" to="imu/data" />
     </node>
 
     <node pkg="pibot_bringup" type="odom_ekf.py" name="odom_ekf" output="screen">
