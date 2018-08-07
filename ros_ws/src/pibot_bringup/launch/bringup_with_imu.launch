@@ -5,8 +5,8 @@
 
     <node pkg="pibot_imu" type="pibot_imu" name="pibot_imu" output="screen" respawn="false">
         <rosparam>
-            imu/accelerometer_bias: {x: 0.295930, y: -0.626698, z: -1.146618}
-            imu/gyroscope_bias: {x: -0.059713, y: 0.008481, z: -0.008550}
+            imu/accelerometer_bias: {x: 0.005436, y: 0.014684, z: -0.395418}
+            imu/gyroscope_bias: {x: -0.035592, y: 0.080670, z: 0.001216}
         </rosparam>
         <param name="imu/perform_calibration" value="false" />
     </node>
