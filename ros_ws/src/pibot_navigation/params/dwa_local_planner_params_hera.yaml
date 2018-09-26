@@ -1,8 +1,8 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters - Kobuki
-  max_vel_x: 0.25
-  min_vel_x: 0.0
+  max_vel_x: 0.3
+  min_vel_x: -0.3
 
   max_vel_y: 0
   min_vel_y: 0
@@ -15,8 +15,8 @@ DWAPlannerROS:
   #   do not set min_trans_vel to 0.0 otherwise dwa will always think translational velocities
   #   are non-negligible and small in place rotational velocities will be created.
 
-  max_rot_vel: 1.2  # choose slightly less than the base's capability
-  min_rot_vel: 0.8  # this is the min angular velocity when there is negligible translational velocity
+  max_rot_vel: 1.0  # choose slightly less than the base's capability
+  min_rot_vel: 0.4  # this is the min angular velocity when there is negligible translational velocity
   rot_stopped_vel: 0.1
   
   acc_lim_x: 1 # maximum is theoretically 2.0, but we 
