@@ -7,3 +7,9 @@ v1.1	modify keyboard velocity
 	modify rviz show parameter
 	modify simulator parameter
 v1.2	add init shell
+v1.3	add hadesX parameter
+v1.4	support imu
+v1.5	add install ros shell
+	adb init evn shell
+v1.6	support hector slam
+	support karto slam 
