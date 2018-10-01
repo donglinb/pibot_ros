@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from launch_demo import launch_demo
 import rospy
 
@@ -46,6 +47,8 @@ class navigation_demo:
         rospy.loginfo("[Navi] navigation feedback\r\n%s"%feedback)
 
     def goto(self, p):
+        rospy.loginfo("[Navi] goto %s"%p)
+
         goal = MoveBaseGoal()
 
         goal.target_pose.header.frame_id = 'map'
@@ -59,6 +62,14 @@ class navigation_demo:
         goal.target_pose.pose.orientation.w = q[3]
 
         self.move_base.send_goal(goal, self._done_cb, self._active_cb, self._feedback_cb)
+        result = self.move_base.wait_for_result(rospy.Duration(60))
+        if not result:
+            self.move_base.cancel_goal()
+            rospy.loginfo("Timed out achieving goal")
+        else:
+            state = self.move_base.get_state()
+            if state == GoalStatus.SUCCEEDED:
+                rospy.loginfo("reach goal %s succeeded!"%p)
         return True
 
     def cancel(self):
@@ -68,22 +79,18 @@ class navigation_demo:
 if __name__ == "__main__":
     rospy.init_node('navigation_demo',anonymous=True)
 
-    launch_nav = launch_demo(["roslaunch", "pibot_simulator", "nav.launch"])
-    launch_nav.launch()
+    goalListX = rospy.get_param('~goalListX', '2.0, 2.0')
+    goalListY = rospy.get_param('~goalListY', '2.0, 4.0')
+    goalListYaw = rospy.get_param('~goalListYaw', '0, 90.0')
 
-    r = rospy.Rate(0.2)
-    r.sleep()
-
-    rospy.loginfo("set pose...")
-    r = rospy.Rate(1)
-    r.sleep()
+    goals = [[float(x), float(y), float(yaw)] for (x, y, yaw) in zip(goalListX.split(","),goalListY.split(","),goalListYaw.split(","))]
     navi = navigation_demo()
-    navi.set_pose([-0.7,-0.4,0])
 
-    rospy.loginfo("goto goal...")
     r = rospy.Rate(1)
     r.sleep()
-    navi.goto([0.25,4, 90])
+
+    for goal in goals:
+        navi.goto(goal)
 
     while not rospy.is_shutdown():
         r.sleep()
