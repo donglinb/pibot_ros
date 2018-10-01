@@ -1,21 +1,31 @@
-# PIBOT ROS Workspace v1.2
+# PIBOT ROS Workspace v1.6
 
-# v1.0	
-    - first 
-# v1.1	modify keyboard velocity
-	- fix aplollo model bug
-	- fix zeus laser_link bug
-	- modify rviz show parameter
-	- modify simulator parameter
-# v1.2	
-    - add init shell
-# v1.3	
-    - add hadesX parameter
-# v1.4	
-    - support imu
-# v1.5	
-    - add install ros shell
-	- adb init evn shell
-# v1.6	
-    - support hector slam
-	- support karto slam 
+## install ros
+```shell
+cd ~/pibot_ros/
+./pibot_install_ros.sh
+source ~/.bashrc
+```
+
+## init environment
+for master
+```shell
+cd ~/pibot_ros/
+./pibot_init_env.sh apollo rplidar
+source ~/.bashrc
+```
+
+for salve
+```shell
+cd ~/pibot_ros/
+./pibot_init_env.sh apollo rplidar master_ip
+source ~/.bashrc
+```
+
+## run example
+```
+roslaunch pibot_bringup bringup.launch
+roslaunch pibot keyboard_teleop.launch
+```
+
+then you can control your robot
