@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if ! [ $PIBOT_ENV_INITIALIZED ]; then
     echo "export PIBOT_ENV_INITIALIZED=1" >> ~/.bashrc
     echo "source ~/.pibotrc" >> ~/.bashrc
