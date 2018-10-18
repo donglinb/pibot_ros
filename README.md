@@ -1,4 +1,4 @@
-# PIBOT ROS Workspace v1.6
+# PIBOT ROS Workspace v1.7
 
 ## install ros
 ```shell

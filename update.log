@@ -15,7 +15,9 @@
     - support imu
 # v1.5	
     - add install ros shell
-	- adb init evn shell
+    - add init evn shell
 # v1.6	
     - support hector slam
-	- support karto slam 
+    - support karto slam 
+# v1.7
+    - support cartographer
