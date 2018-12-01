@@ -77,6 +77,7 @@ echo " "
 sudo cp rules/pibot.rules  /etc/udev/rules.d
 sudo cp rules/rplidar.rules  /etc/udev/rules.d
 sudo cp rules/ydlidar.rules  /etc/udev/rules.d
+sudo cp rules/orbbec.rules  /etc/udev/rules.d
 echo " "
 echo "Restarting udev"
 echo ""
