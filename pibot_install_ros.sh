@@ -17,7 +17,7 @@ fi
 
 echo "ros:" $ros_version
 
-sudo apt-get -y --allow-unauthenticated  install ros-${ros_version}-ros-base ros-${ros_version}-slam-gmapping ros-${ros_version}-navigation ros-${ros_version}-xacro ros-${ros_version}-yocs-velocity-smoother ros-${ros_version}-robot-state-publisher ros-${ros_version}-joint-state-publisher ros-${ros_version}-teleop-twist-* ros-${ros_version}-rviz ros-${ros_version}-control-msgs ros-${ros_version}-kdl-parser-py ros-${ros_version}-tf2-geometry-msgs ros-${ros_version}-hector-mapping ros-${ros_version}-slam-karto ros-${ros_version}-hector-geotiff ros-${ros_version}-hector-trajectory-server ros-${ros_version}-usb-cam ros-${ros_version}-image-transport ros-${ros_version}-image-transport-plugins ros-${ros_version}-astra-launch ros-{ros_version}-astra-camera ros-{ros_version}-depthimage-to-laserscan ros-{$ros_version}-openni2*
+sudo apt-get -y --allow-unauthenticated  install ros-${ros_version}-ros-base ros-${ros_version}-slam-gmapping ros-${ros_version}-navigation ros-${ros_version}-xacro ros-${ros_version}-yocs-velocity-smoother ros-${ros_version}-robot-state-publisher ros-${ros_version}-joint-state-publisher ros-${ros_version}-teleop-twist-* ros-${ros_version}-rviz ros-${ros_version}-control-msgs ros-${ros_version}-kdl-parser-py ros-${ros_version}-tf2-geometry-msgs ros-${ros_version}-hector-mapping ros-${ros_version}-slam-karto ros-${ros_version}-hector-geotiff ros-${ros_version}-hector-trajectory-server ros-${ros_version}-usb-cam ros-${ros_version}-image-transport ros-${ros_version}-image-transport-plugins ros-${ros_version}-astra-launch ros-${ros_version}-astra-camera ros-${ros_version}-depthimage-to-laserscan ros-${ros_version}-openni2*
 
 read -s -n1 -p "install ros gui tools?(y/N)" 
 
