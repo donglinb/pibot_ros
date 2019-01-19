@@ -1,5 +1,5 @@
 port: /dev/pibot
-buadrate: 115200
+buadrate: 921600
 
 base_frame: base_link
 odom_frame: odom

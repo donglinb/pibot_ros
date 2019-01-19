@@ -21,3 +21,7 @@
     - support karto slam 
 # v1.7
     - support cartographer
+# v1.8
+    - support depth camera
+    - add alias command
+    - add apolloX model

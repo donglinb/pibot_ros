@@ -71,6 +71,30 @@ fi
 echo "model: " $PIBOT_MODEL " lidar:" $PIBOT_LIDAR  " local_ip: " ${LOCAL_IP} " ros_master_ip:" ${ROS_MASTER_IP}
 echo "source ~/pibot_ros/ros_ws/devel/setup.bash" >> ~/.pibotrc 
 
+#alias
+echo "alias pibot_bringup='roslaunch pibot_bringup bringup.launch'" >> ~/.pibotrc 
+echo "alias pibot_bringup_with_imu='roslaunch pibot_bringup bringup_with_imu.launch'" >> ~/.pibotrc 
+echo "alias pibot_lidar='roslaunch pibot_bringup ${PIBOT_LIDAR}.launch'" >> ~/.pibotrc 
+echo "alias pibot_base='roslaunch pibot_bringup robot.launch'" >> ~/.pibotrc 
+echo "alias pibot_base_with_imu='roslaunch pibot_bringup robot_with_imu.launch'" >> ~/.pibotrc 
+echo "alias pibot_control='roslaunch pibot keyboard_teleop.launch'" >> ~/.pibotrc 
+
+echo "alias pibot_gmapping='roslaunch pibot_navigation gmapping.launch'" >> ~/.pibotrc 
+echo "alias pibot_gmapping_with_imu='roslaunch pibot_navigation gammaping_with_imu.launch'" >> ~/.pibotrc 
+echo "alias pibot_save_map='roslaunch pibot_navigation save_map.launch'" >> ~/.pibotrc 
+
+echo "alias pibot_naviagtion='roslaunch pibot_navigation nav.launch'" >> ~/.pibotrc 
+echo "alias pibot_naviagtion_with_imu='roslaunch pibot_navigation nav_with_imu.launch'" >> ~/.pibotrc 
+echo "alias pibot_view='roslaunch pibot_navigation view_nav.launch'" >> ~/.pibotrc 
+
+echo "alias pibot_cartographer='roslaunch pibot_navigation cartographer.launch'" >> ~/.pibotrc 
+echo "alias pibot_view_cartographer='roslaunch pibot_navigation view_cartographer.launch'" >> ~/.pibotrc 
+
+echo "alias pibot_hector_mapping='roslaunch pibot_navigation hector_mapping.launch'" >> ~/.pibotrc 
+echo "alias pibot_hector_mapping_without_imu='roslaunch pibot_navigation hector_mapping_without_odom.launch'" >> ~/.pibotrc 
+
+echo "alias pibot_karto_slam='roslaunch pibot_navigation karto_slam.launch'" >> ~/.pibotrc 
+
 #rules
 echo "setup pibot modules"
 echo " "

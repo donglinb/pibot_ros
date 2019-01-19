@@ -107,7 +107,7 @@ void PibotIMU::rawCallback(const pibot_msgs::RawImuConstPtr& raw_msg)
       gyroscope_bias_["x"] += raw_msg->raw_angular_velocity.x;
       gyroscope_bias_["y"] += raw_msg->raw_angular_velocity.y;
       gyroscope_bias_["z"] += raw_msg->raw_angular_velocity.z;
-
+	
       taken_samples++;
     }
     else
