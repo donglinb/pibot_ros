@@ -93,4 +93,57 @@
     <axis
       xyz="0 1 0" />
   </joint>
+  <link
+    name="3dsensor_link">
+    <inertial>
+      <origin
+        xyz="-0.0017532 9.7056E-08 0.018369"
+        rpy="0 0 0" />
+      <mass
+        value="0.17932" />
+      <inertia
+        ixx="8.4489E-05"
+        ixy="7.2842E-12"
+        ixz="3.6373E-06"
+        iyy="7.9944E-05"
+        iyz="-3.7959E-10"
+        izz="0.00011884" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 0 1.57" />
+      <geometry>
+        <mesh
+          filename="package://pibot_description/meshes/sensor/astra.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.25 0.25 0.25 1.2" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pibot_description/meshes/sensor/astra.dae" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="3dsensor_link_joint"
+    type="fixed">
+    <origin
+      xyz="-0.1 0 0.25"
+      rpy="1.2246E-16 -6.123E-17 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="3dsensor_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
 </robot>
