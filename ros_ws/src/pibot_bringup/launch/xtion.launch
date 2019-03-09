@@ -12,4 +12,7 @@
     <param name="output_frame_id" value="/3dsensor_link" />
   </node>
 
+  <node name="pub_compressed_image" pkg="image_transport" type="republish" args="raw in:=/camera/rgb/image_raw compressed out:=/usb_cam/image_compressed">
+    <remap from="/usb_cam/image_compressed/compressed" to="/compressed_image"/>
+  </node>
 </launch>
