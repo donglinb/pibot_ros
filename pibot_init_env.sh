@@ -3,6 +3,19 @@
 if ! [ $PIBOT_ENV_INITIALIZED ]; then
     echo "export PIBOT_ENV_INITIALIZED=1" >> ~/.bashrc
     echo "source ~/.pibotrc" >> ~/.bashrc
+
+    #rules
+    echo "setup pibot modules"
+    echo " "
+    sudo cp rules/pibot.rules  /etc/udev/rules.d
+    sudo cp rules/rplidar.rules  /etc/udev/rules.d
+    sudo cp rules/ydlidar.rules  /etc/udev/rules.d
+    sudo cp rules/orbbec.rules  /etc/udev/rules.d
+    echo " "
+    echo "Restarting udev"
+    echo ""
+    sudo service udev reload
+    sudo service udev restart
 fi
 
 code_name=$(lsb_release -sc)
@@ -27,22 +40,48 @@ echo "source /opt/ros/${ros_version}/setup.bash" > ~/.pibotrc
 #    exit
 #fi
 
+LOCAL_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/" '{print $1}'`
 echo "LOCAL_IP=\`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print \$2}' | awk -F"/" '{print \$1}'\`" >> ~/.pibotrc
 
-#PIBOT_MODEL
-if [ ! $1 ]; then
-    echo "set apollo as default model"
-    PIBOT_MODEL=apollo
-else
-    PIBOT_MODEL=$1
+if [ ! ${LOCAL_IP} ]; then
+    echo "please check network"
+    exit
 fi
 
-#PIBOT_LIDAR
-if [ ! $2 ]; then
-    echo "set rplidar as default lidar"
-    PIBOT_LIDAR=rplidar
+read -p "please specify pibot model(0:apollo,1:apolloX,2:zeus,3:hera,4:hades,other for user defined):" PIBOT_MODEL_INPUT
+
+if [ "$PIBOT_MODEL_INPUT" = "0" ]; then
+    PIBOT_MODEL='apollo'
+elif [ "$PIBOT_MODEL_INPUT" = "1" ]; then
+    PIBOT_MODEL='apolloX'
+elif [ "$PIBOT_MODEL_INPUT" = "2" ]; then
+    PIBOT_MODEL='zeus'
+elif [ "$PIBOT_MODEL_INPUT" = "3" ]; then
+    PIBOT_MODEL='hera'
+elif [ "$PIBOT_MODEL_INPUT" = "4" ]; then
+    PIBOT_MODEL='hades'
 else
-    PIBOT_LIDAR=$2 
+    PIBOT_MODEL=$PIBOT_MODEL_INPUT 
+fi
+
+read -p "please specify your pibot lidar(0:rplidar,1:rplidar-a3,2:eai-x4,3:eai-g4,4:xtion,5:astra,6:kinectV1,other for user defined):" PIBOT_LIDAR_INPUT
+
+if [ "$PIBOT_LIDAR_INPUT" = "0" ]; then
+    PIBOT_LIDAR='rplidar'
+elif [ "$PIBOT_LIDAR_INPUT" = "1" ]; then
+    PIBOT_LIDAR='rplidar-a3'
+elif [ "$PIBOT_LIDAR_INPUT" = "2" ]; then
+    PIBOT_LIDAR='eai-x4'
+elif [ "$PIBOT_LIDAR_INPUT" = "3" ]; then
+    PIBOT_LIDAR='eai-g4'
+elif [ "$PIBOT_LIDAR_INPUT" = "4" ]; then
+    PIBOT_LIDAR='xtion'
+elif [ "$PIBOT_LIDAR_INPUT" = "5" ]; then
+    PIBOT_LIDAR='astra'
+elif [ "$PIBOT_LIDAR_INPUT" = "6" ]; then
+    PIBOT_LIDAR='kinectV1'
+else
+    PIBOT_LIDAR=$PIBOT_LIDAR_INPUT
 fi
 
 echo "export ROS_IP=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
@@ -50,25 +89,27 @@ echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
 echo "export PIBOT_MODEL=${PIBOT_MODEL}" >> ~/.pibotrc
 echo "export PIBOT_LIDAR=${PIBOT_LIDAR}" >> ~/.pibotrc
 
-LOCAL_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/" '{print $1}'`
-
-if [ $3 ]; then
-    ROS_MASTER_IP_STR=`echo $3`
-    ROS_MASTER_IP=`echo $3`
-    echo "set " $3 "as rosmaster ip"
-else
+read -p "please select specify the current machine(ip:$LOCAL_IP) type(0:onboard,other:remote):" PIBOT_MACHINE_VALUE
+if [ "$PIBOT_MACHINE_VALUE" = "0" ]; then
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=`echo $LOCAL_IP`
-    echo "set local ip as rosmaster ip"
+else
+    read -p "plase specify the onboard machine ip for commnicationi:" PIBOT_ONBOARD_MACHINE_IP
+    ROS_MASTER_IP_STR=`echo $PIBOT_ONBOARD_MACHINE_IP`
+    ROS_MASTER_IP=`echo $PIBOT_ONBOARD_MACHINE_IP`
 fi
 
 echo "export ROS_MASTER_URI=`echo http://${ROS_MASTER_IP_STR}:11311`" >> ~/.pibotrc
 
-if [ ! ${LOCAL_IP} ]; then
-    echo "please check network"
-    exit
-fi
-echo "model: " $PIBOT_MODEL " lidar:" $PIBOT_LIDAR  " local_ip: " ${LOCAL_IP} " ros_master_ip:" ${ROS_MASTER_IP}
+echo "*****************************************************************"
+echo "model: " $PIBOT_MODEL 
+echo "lidar:" $PIBOT_LIDAR  
+echo "local_ip: " ${LOCAL_IP} 
+echo "onboard_ip:" ${ROS_MASTER_IP}
+echo ""
+echo "please execute source ~/.bashrc to make the configure effective"
+echo "*****************************************************************"
+
 echo "source ~/pibot_ros/ros_ws/devel/setup.bash" >> ~/.pibotrc 
 
 #alias
@@ -94,18 +135,4 @@ echo "alias pibot_hector_mapping='roslaunch pibot_navigation hector_mapping.laun
 echo "alias pibot_hector_mapping_without_imu='roslaunch pibot_navigation hector_mapping_without_odom.launch'" >> ~/.pibotrc 
 
 echo "alias pibot_karto_slam='roslaunch pibot_navigation karto_slam.launch'" >> ~/.pibotrc 
-
-#rules
-echo "setup pibot modules"
-echo " "
-sudo cp rules/pibot.rules  /etc/udev/rules.d
-sudo cp rules/rplidar.rules  /etc/udev/rules.d
-sudo cp rules/ydlidar.rules  /etc/udev/rules.d
-sudo cp rules/orbbec.rules  /etc/udev/rules.d
-echo " "
-echo "Restarting udev"
-echo ""
-sudo service udev reload
-sudo service udev restart
-echo "finish "
 
