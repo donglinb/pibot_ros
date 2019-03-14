@@ -89,7 +89,7 @@ echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
 echo "export PIBOT_MODEL=${PIBOT_MODEL}" >> ~/.pibotrc
 echo "export PIBOT_LIDAR=${PIBOT_LIDAR}" >> ~/.pibotrc
 
-read -p "please select specify the current machine(ip:$LOCAL_IP) type(0:onboard,other:remote):" PIBOT_MACHINE_VALUE
+read -p "please specify the current machine(ip:$LOCAL_IP) type(0:onboard,other:remote):" PIBOT_MACHINE_VALUE
 if [ "$PIBOT_MACHINE_VALUE" = "0" ]; then
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=`echo $LOCAL_IP`
