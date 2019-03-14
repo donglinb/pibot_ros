@@ -94,7 +94,7 @@
       xyz="0 0 0" />
   </joint>
   <link
-    name="3dsensor_link">
+    name="camera_link">
     <inertial>
       <origin
         xyz="-0.0017532 9.7056E-08 0.018369"
@@ -134,7 +134,7 @@
     </collision>
   </link>
   <joint
-    name="3dsensor_link_joint"
+    name="camera_link_joint"
     type="fixed">
     <origin
       xyz="-0.05 0 0.25"
@@ -142,7 +142,7 @@
     <parent
       link="base_link" />
     <child
-      link="3dsensor_link" />
+      link="camera_link" />
     <axis
       xyz="0 0 0" />
   </joint>

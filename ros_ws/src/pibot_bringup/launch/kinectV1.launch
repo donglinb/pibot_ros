@@ -19,7 +19,7 @@
     </include>
    
     <arg name="image" default="/camera/depth_registered/image_raw" />
-    <arg name="camera_info" default="//camera/depth_registered/camera_info" />
+    <arg name="camera_info" default="/camera/depth_registered/camera_info" />
     <arg name="scan" default="/scan" />    
     <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan">
         <remap from="image" to="$(arg image)" />
