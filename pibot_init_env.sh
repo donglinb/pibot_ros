@@ -5,7 +5,7 @@ if ! [ $PIBOT_ENV_INITIALIZED ]; then
     echo "source ~/.pibotrc" >> ~/.bashrc
 
     #rules
-    echo "setup pibot modules"
+    echo -e "\033[1;32m setup pibot modules"
     echo " "
     sudo cp rules/pibot.rules  /etc/udev/rules.d
     sudo cp rules/rplidar.rules  /etc/udev/rules.d
@@ -25,7 +25,7 @@ if [ "$code_name" = "trusty" ]; then
 elif [ "$code_name" = "xenial" ]; then
     ros_version="kinetic"
 else
-    echo "PIBOT not support "$code_name
+    echo -e "\033[1;31m PIBOT not support "$code_name"\033[0m"
     exit
 fi 
 
@@ -44,11 +44,12 @@ LOCAL_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/
 echo "LOCAL_IP=\`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print \$2}' | awk -F"/" '{print \$1}'\`" >> ~/.pibotrc
 
 if [ ! ${LOCAL_IP} ]; then
-    echo "please check network"
+    echo -e "\033[1;31m please check network\033[0m"
     exit
 fi
 
-read -p "please specify pibot model(0:apollo,1:apolloX,2:zeus,3:hera,4:hades,other for user defined):" PIBOT_MODEL_INPUT
+echo -e "\033[1;34mplease specify pibot model\033[1;32m(0:apollo,1:apolloX,2:zeus,3:hera,4:hades,other for user defined):\033[1;33m"
+read -p "" PIBOT_MODEL_INPUT
 
 if [ "$PIBOT_MODEL_INPUT" = "0" ]; then
     PIBOT_MODEL='apollo'
@@ -64,7 +65,8 @@ else
     PIBOT_MODEL=$PIBOT_MODEL_INPUT 
 fi
 
-read -p "please specify pibot driver board type(0:arduino(mega2560),1:stm32f103,2:stm32f407,other for user defined):" PIBOT_DIRVER_BOARD_INPUT
+echo -e "\033[1;34mplease specify pibot driver board type\033[1;32m(0:arduino(mega2560),1:stm32f103,2:stm32f407,other for user defined):\033[1;33m"
+read -p "" PIBOT_DIRVER_BOARD_INPUT
 
 if [ "$PIBOT_DIRVER_BOARD_INPUT" = "0" ]; then
     PIBOT_DRIVER_BAUD=115200
@@ -76,9 +78,10 @@ else
     PIBOT_DRIVER_BAUD=115200
 fi
 
-python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUDS
+python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUD
 
-read -p "please specify your pibot lidar(0:rplidar(a1,a2),1:rplidar(a3),2:eai(x4),3:eai(g4),4:xtion,5:astra,6:kinectV1,other for user defined):" PIBOT_LIDAR_INPUT
+echo -e "\033[1;34mplease specify your pibot lidar\033[1;32m(0:rplidar(a1,a2),1:rplidar(a3),2:eai(x4),3:eai(g4),4:xtion,5:astra,6:kinectV1,other for user defined):\033[1;33m"
+read -p "" PIBOT_LIDAR_INPUT
 
 if [ "$PIBOT_LIDAR_INPUT" = "0" ]; then
     PIBOT_LIDAR='rplidar'
@@ -103,7 +106,8 @@ echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
 echo "export PIBOT_MODEL=${PIBOT_MODEL}" >> ~/.pibotrc
 echo "export PIBOT_LIDAR=${PIBOT_LIDAR}" >> ~/.pibotrc
 
-read -p "please specify the current machine(ip:$LOCAL_IP) type(0:onboard,other:remote):" PIBOT_MACHINE_VALUE
+echo -e "\033[1;34mplease specify the current machine(ip:$LOCAL_IP) type\033[1;32m(0:onboard,other:remote):\033[1;33m" 
+read -p "" PIBOT_MACHINE_VALUE
 if [ "$PIBOT_MACHINE_VALUE" = "0" ]; then
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=`echo $LOCAL_IP`
@@ -115,14 +119,14 @@ fi
 
 echo "export ROS_MASTER_URI=`echo http://${ROS_MASTER_IP_STR}:11311`" >> ~/.pibotrc
 
-echo "*****************************************************************"
-echo "model: " $PIBOT_MODEL 
-echo "lidar:" $PIBOT_LIDAR  
-echo "local_ip: " ${LOCAL_IP} 
-echo "onboard_ip:" ${ROS_MASTER_IP}
+echo -e "\033[1;35m*****************************************************************"
+echo "model:        " $PIBOT_MODEL 
+echo "lidar:        " $PIBOT_LIDAR  
+echo "local_ip:     " ${LOCAL_IP} 
+echo "onboard_ip:   " ${ROS_MASTER_IP}
 echo ""
-echo "please execute source ~/.bashrc to make the configure effective"
-echo "*****************************************************************"
+echo -e "please execute \033[1;36;4msource ~/.bashrc\033[1;35;0m to make the configure effective\033[0m"
+echo -e "\033[1;35m*****************************************************************\033[0m"
 
 echo "source ~/pibot_ros/ros_ws/devel/setup.bash" >> ~/.pibotrc 
 
