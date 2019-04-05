@@ -10,7 +10,7 @@
 		<param name="scan_time" value="0.05"/>
 		<param name="range_min" value="0.5"/>
 		<param name="range_max" value="5.5"/>
-		<param name="output_frame_id" value="/3dsensor_link" />
+		<param name="output_frame_id" value="/camera_link" />
 
 	</node>
 

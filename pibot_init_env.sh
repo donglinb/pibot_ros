@@ -64,7 +64,21 @@ else
     PIBOT_MODEL=$PIBOT_MODEL_INPUT 
 fi
 
-read -p "please specify your pibot lidar(0:rplidar,1:rplidar-a3,2:eai-x4,3:eai-g4,4:xtion,5:astra,6:kinectV1,other for user defined):" PIBOT_LIDAR_INPUT
+read -p "please specify pibot driver board type(0:arduino(mega2560),1:stm32f103,2:stm32f407,other for user defined):" PIBOT_DIRVER_BOARD_INPUT
+
+if [ "$PIBOT_DIRVER_BOARD_INPUT" = "0" ]; then
+    PIBOT_DRIVER_BAUD=115200
+elif [ "$PIBOT_DIRVER_BOARD_INPUT" = "1" ]; then
+    PIBOT_DRIVER_BAUD=115200
+elif [ "$PIBOT_DIRVER_BOARD_INPUT" = "2" ]; then
+    PIBOT_DRIVER_BAUD=921600
+else
+    PIBOT_DRIVER_BAUD=115200
+fi
+
+python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUD
+
+read -p "please specify your pibot lidar(0:rplidar(a1,a2),1:rplidar(a3),2:eai(x4),3:eai(g4),4:xtion,5:astra,6:kinectV1,other for user defined):" PIBOT_LIDAR_INPUT
 
 if [ "$PIBOT_LIDAR_INPUT" = "0" ]; then
     PIBOT_LIDAR='rplidar'
@@ -94,7 +108,7 @@ if [ "$PIBOT_MACHINE_VALUE" = "0" ]; then
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=`echo $LOCAL_IP`
 else
-    read -p "plase specify the onboard machine ip for commnicationi:" PIBOT_ONBOARD_MACHINE_IP
+    read -p "plase specify the onboard machine ip for commnication:" PIBOT_ONBOARD_MACHINE_IP
     ROS_MASTER_IP_STR=`echo $PIBOT_ONBOARD_MACHINE_IP`
     ROS_MASTER_IP=`echo $PIBOT_ONBOARD_MACHINE_IP`
 fi
