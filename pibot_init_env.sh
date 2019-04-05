@@ -112,7 +112,8 @@ if [ "$PIBOT_MACHINE_VALUE" = "0" ]; then
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=`echo $LOCAL_IP`
 else
-    read -p "plase specify the onboard machine ip for commnication:" PIBOT_ONBOARD_MACHINE_IP
+    echo -e "\033[1;34mplase specify the onboard machine ip for commnication:\033[1;33m" 
+    read -p "" PIBOT_ONBOARD_MACHINE_IP
     ROS_MASTER_IP_STR=`echo $PIBOT_ONBOARD_MACHINE_IP`
     ROS_MASTER_IP=`echo $PIBOT_ONBOARD_MACHINE_IP`
 fi
@@ -125,7 +126,7 @@ echo "lidar:        " $PIBOT_LIDAR
 echo "local_ip:     " ${LOCAL_IP} 
 echo "onboard_ip:   " ${ROS_MASTER_IP}
 echo ""
-echo -e "please execute \033[1;36;4msource ~/.bashrc\033[1;35;0m to make the configure effective\033[0m"
+echo -e "please execute \033[1;36;4msource ~/.bashrc\033[1;35m to make the configure effective\033[0m"
 echo -e "\033[1;35m*****************************************************************\033[0m"
 
 echo "source ~/pibot_ros/ros_ws/devel/setup.bash" >> ~/.pibotrc 
