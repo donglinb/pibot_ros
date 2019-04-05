@@ -76,7 +76,7 @@ else
     PIBOT_DRIVER_BAUD=115200
 fi
 
-python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUD
+python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUDS
 
 read -p "please specify your pibot lidar(0:rplidar(a1,a2),1:rplidar(a3),2:eai(x4),3:eai(g4),4:xtion,5:astra,6:kinectV1,other for user defined):" PIBOT_LIDAR_INPUT
 
