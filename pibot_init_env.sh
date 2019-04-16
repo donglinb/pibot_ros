@@ -72,12 +72,16 @@ read -p "" PIBOT_DIRVER_BOARD_INPUT
 
 if [ "$PIBOT_DIRVER_BOARD_INPUT" = "0" ]; then
     PIBOT_DRIVER_BAUD=115200
+    PIBOT_BOARD='arduino'
 elif [ "$PIBOT_DIRVER_BOARD_INPUT" = "1" ]; then
     PIBOT_DRIVER_BAUD=115200
+    PIBOT_BOARD='stm32f1'
 elif [ "$PIBOT_DIRVER_BOARD_INPUT" = "2" ]; then
     PIBOT_DRIVER_BAUD=921600
+    PIBOT_BOARD='stm32f4'
 else
     PIBOT_DRIVER_BAUD=115200
+    PIBOT_BOARD=$PIBOT_DIRVER_BOARD_INPUT
 fi
 
 python ros_ws/src/pibot_bringup/scripts/set_baud.py $PIBOT_DRIVER_BAUD
@@ -107,6 +111,7 @@ echo "export ROS_IP=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
 echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >> ~/.pibotrc
 echo "export PIBOT_MODEL=${PIBOT_MODEL}" >> ~/.pibotrc
 echo "export PIBOT_LIDAR=${PIBOT_LIDAR}" >> ~/.pibotrc
+echo "export PIBOT_BOARD=${PIBOT_BOARD}" >> ~/.pibotrc
 
 echo -e "\033[1;34mplease specify the current machine(ip:$LOCAL_IP) type\033[1;32m(0:onboard,other:remote):\033[1;33m" 
 read -p "" PIBOT_MACHINE_VALUE
@@ -142,7 +147,7 @@ echo "alias pibot_base_with_imu='roslaunch pibot_bringup robot_with_imu.launch'"
 echo "alias pibot_control='roslaunch pibot keyboard_teleop.launch'" >> ~/.pibotrc 
 
 echo "alias pibot_gmapping='roslaunch pibot_navigation gmapping.launch'" >> ~/.pibotrc 
-echo "alias pibot_gmapping_with_imu='roslaunch pibot_navigation gammaping_with_imu.launch'" >> ~/.pibotrc 
+echo "alias pibot_gmapping_with_imu='roslaunch pibot_navigation gmapping_with_imu.launch'" >> ~/.pibotrc 
 echo "alias pibot_save_map='roslaunch pibot_navigation save_map.launch'" >> ~/.pibotrc 
 
 echo "alias pibot_naviagtion='roslaunch pibot_navigation nav.launch'" >> ~/.pibotrc 
