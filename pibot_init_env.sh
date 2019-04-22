@@ -145,6 +145,7 @@ echo "alias pibot_lidar='roslaunch pibot_bringup ${PIBOT_LIDAR}.launch'" >> ~/.p
 echo "alias pibot_base='roslaunch pibot_bringup robot.launch'" >> ~/.pibotrc 
 echo "alias pibot_base_with_imu='roslaunch pibot_bringup robot_with_imu.launch'" >> ~/.pibotrc 
 echo "alias pibot_control='roslaunch pibot keyboard_teleop.launch'" >> ~/.pibotrc 
+echo "alias pibot_configure='rosrun rqt_reconfigure rqt_reconfigure'" >> ~/.pibotrc 
 
 echo "alias pibot_gmapping='roslaunch pibot_navigation gmapping.launch'" >> ~/.pibotrc 
 echo "alias pibot_gmapping_with_imu='roslaunch pibot_navigation gmapping_with_imu.launch'" >> ~/.pibotrc 
