@@ -26,6 +26,8 @@ elif [ "$code_name" = "xenial" ]; then
     ros_version="kinetic"
 elif [ "$code_name" = "bionic" ]; then
     ros_version="melodic"
+elif [ "$code_name" = "focal" ]; then
+    ros_version="noetic"
 else
     echo -e "\033[1;31m PIBOT not support "$code_name"\033[0m"
     exit

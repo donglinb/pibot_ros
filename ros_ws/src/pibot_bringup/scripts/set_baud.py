@@ -4,11 +4,9 @@ import yaml
 import sys
 import os
 
-
-
 local_path=os.path.dirname(__file__)
 if (len(sys.argv) != 2):
-    print 'please specify buad'
+    print('please specify buad')
     sys.exit()
 
 f = open(local_path+'/../params/base_params.yaml')  
